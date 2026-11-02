@@ -1,0 +1,501 @@
+<title>Admit One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Spline+Sans:wght@400;500;600&display=swap">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  :root {
+    --surround: #0B2724;
+    --surround-deep: #071C1A;
+    --stock: #E9A63C;
+    --stock-edge: #D4912A;
+    --ink: #142B27;
+    --ink-soft: #3D5450;
+    --bone: #F2EDE3;
+    --rose: #8C3A2E;
+
+    --display: "Anton", "Haettenschweiler", "Arial Narrow", sans-serif;
+    --data: "Courier Prime", "Courier New", monospace;
+    --body: "Spline Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body {
+    background: var(--surround);
+    background-image: radial-gradient(120% 90% at 50% 0%, #10332F 0%, var(--surround) 45%, var(--surround-deep) 100%);
+    color: var(--bone);
+    font-family: var(--body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 18px;
+    padding-block: 40px;
+  }
+
+  .ticket {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    min-width: 0;
+    background: var(--stock);
+    color: var(--ink);
+    border-radius: 4px;
+    box-shadow:
+      0 1px 0 var(--stock-edge),
+      0 18px 40px -12px rgba(0, 0, 0, 0.55),
+      0 2px 6px rgba(0, 0, 0, 0.3);
+    animation: settle 820ms cubic-bezier(0.18, 0.9, 0.2, 1) both;
+  }
+
+  @keyframes settle {
+    from { transform: translateY(-16px) rotate(-1.4deg); }
+    to   { transform: translateY(0) rotate(0deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticket { animation: none; }
+  }
+
+  /* ---- upper stub ---- */
+
+  .stub-top {
+    padding: 26px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .eyebrow {
+    font-family: var(--data);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.72;
+  }
+
+  .admitting {
+    font-family: var(--data);
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid rgba(20, 43, 39, 0.28);
+  }
+
+  .admitting b {
+    font-weight: 700;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 9.5vw, 2.75rem);
+    line-height: 0.94;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  h1 .quiet {
+    display: block;
+    font-size: 0.56em;
+    color: var(--ink-soft);
+    margin-top: 0.3em;
+  }
+
+  /* ---- perforation ---- */
+
+  .perf {
+    position: relative;
+    height: 0;
+    border-top: 2px dashed rgba(20, 43, 39, 0.4);
+  }
+
+  .perf::before,
+  .perf::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--surround);
+    transform: translateY(-50%);
+  }
+
+  .perf::before { left: -11px; }
+  .perf::after  { right: -11px; }
+
+  /* ---- lower stub ---- */
+
+  .stub-bottom {
+    padding: 26px 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 11px 14px;
+    font-family: var(--data);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  dt {
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn {
+    font-family: var(--display);
+    font-size: 1.0625rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    transition: transform 120ms ease, background-color 160ms ease;
+  }
+
+  .btn-yes {
+    background: var(--ink);
+    color: var(--stock);
+  }
+
+  .btn-yes:hover { background: #0B1F1C; }
+  .btn-yes:active { transform: translateY(1px); }
+
+  .btn-yes:focus-visible {
+    outline: 3px solid var(--rose);
+    outline-offset: 2px;
+  }
+
+  /* ---- the no button, which cannot be clicked ---- */
+
+  .no-zone {
+    position: relative;
+    min-width: 0;
+  }
+
+  .btn-no-ghost,
+  .btn-no {
+    font-family: var(--data);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1.5px solid rgba(20, 43, 39, 0.45);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    background: transparent;
+  }
+
+  .btn-no-ghost {
+    visibility: hidden;
+    overflow-wrap: break-word;
+  }
+
+  .btn-no {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 5;
+    transition: left 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                top 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 140ms ease;
+  }
+
+  .btn-no:hover { background: rgba(20, 43, 39, 0.07); }
+  .btn-no:active { transform: scale(0.96); }
+
+  .btn-no.dodging {
+    position: fixed;
+    inset: auto;
+  }
+
+  .btn-no:focus-visible {
+    outline: 3px solid var(--rose);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-no { transition: none; }
+  }
+
+  .chase {
+    font-family: var(--data);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fine {
+    font-family: var(--data);
+    font-size: 0.6875rem;
+    line-height: 1.55;
+    color: var(--rose);
+    margin: 0;
+  }
+
+  .barcode {
+    height: 34px;
+    border-radius: 0 0 4px 4px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--ink) 0 2px,
+      transparent 2px 4px,
+      var(--ink) 4px 7px,
+      transparent 7px 12px,
+      var(--ink) 12px 13px,
+      transparent 13px 17px
+    );
+    opacity: 0.8;
+  }
+
+  .serial {
+    font-family: var(--data);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--bone);
+    opacity: 0.45;
+    margin: 16px 0 0;
+  }
+
+  /* ---- approval stamp ---- */
+
+  .stamp {
+    position: absolute;
+    top: 40%;
+    right: 7%;
+    font-family: var(--display);
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rose);
+    border: 3px solid var(--rose);
+    border-radius: 4px;
+    padding: 4px 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: rotate(-14deg) scale(0.6);
+  }
+
+  .stamp.show {
+    animation: stamp-hit 520ms cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
+  }
+
+  @keyframes stamp-hit {
+    0%   { opacity: 0; transform: rotate(-14deg) scale(2.2); }
+    55%  { opacity: 1; transform: rotate(-14deg) scale(0.92); }
+    100% { opacity: 1; transform: rotate(-14deg) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stamp.show {
+      animation: none;
+      opacity: 1;
+      transform: rotate(-14deg) scale(1);
+    }
+  }
+</style>
+
+<div class="ticket">
+  <div class="stub-top">
+    <p class="eyebrow">One night only &middot; No 4th vios</p>
+    <p class="admitting">Admitting: <b>Ariana C</b> &amp; guest of her choosing (there is no guest)</p>
+    <h1>
+      Borscht
+      <span class="quiet">A proposal, formally submitted. Am I doing enough???</span>
+    </h1>
+  </div>
+
+  <div class="perf"></div>
+
+  <div class="stub-bottom">
+    <dl>
+      <dt>Date</dt>
+      <dd>Thu, 5 Nov</dd>
+      <dt>Doors</dt>
+      <dd>19:00</dd>
+      <dt>Venue</dt>
+      <dd>Tatar Bunar</dd>
+      <dt>Dress</dt>
+      <dd>Slightly overdressed</dd>
+      <dt>Fare</dt>
+      <dd>Aerosol and Produce</dd>
+    </dl>
+
+    <div class="actions">
+      <a class="btn btn-yes" id="reply-yes" href="https://wa.me/">Yes &mdash; pencil me in</a>
+      <div class="no-zone">
+        <div class="btn-no-ghost" aria-hidden="true">Counter-offer: another night</div>
+        <button type="button" class="btn-no" id="reply-no">Counter-offer: another night</button>
+      </div>
+    </div>
+
+    <p class="chase"><span id="attempts">0</span> dodges logged. Success rate: 0%.</p>
+
+    <p class="fine">
+      Non-transferable. Holder assumes all risk of enjoying themselves.
+      Valid at one (1) Motorola. Tapping Yes opens WhatsApp with your reply
+      already typed &mdash; you still have to press send. The counter-offer
+      button is, legally speaking, decorative.
+    </p>
+  </div>
+
+  <div class="stamp" id="stamp" aria-hidden="true">Approved</div>
+
+  <div class="barcode"></div>
+</div>
+
+<p class="serial">Ticket no. 001 &middot; Issued 02/11</p>
+
+<script>
+  // Digits only, country code, no "+". Left blank, Yes opens WhatsApp's
+  // contact picker instead of jumping straight to a chat.
+  var PHONE = "447476837018";
+
+  document.getElementById("reply-yes").href =
+    "https://wa.me/" + PHONE + "?text=" + encodeURIComponent("Yes. Pencil me in 🎫");
+
+  // ---- the no button ----
+  // It dodges the pointer/finger on approach, and even a direct hit never
+  // does anything but dodge again — there's no path through this button
+  // that registers as "no".
+  (function () {
+    var noBtn = document.getElementById("reply-no");
+    var attemptsEl = document.getElementById("attempts");
+    var stamp = document.getElementById("stamp");
+    var ticketEl = document.querySelector(".ticket");
+    var attempts = 0;
+    var boxW = 0;
+    var boxH = 0;
+
+    var TAUNTS = [
+      "Counter-offer: another night",
+      "Try again",
+      "Nope",
+      "Still no",
+      "Not catching this one",
+      "There is no counter-offer",
+      "Persistent, though"
+    ];
+
+    function rect() {
+      return noBtn.getBoundingClientRect();
+    }
+
+    function dodge(fromX, fromY) {
+      if (!boxW || !boxH) {
+        var r = rect();
+        boxW = r.width;
+        boxH = r.height;
+      }
+      // Keep it on the yellow stock — never let it dodge onto the dark
+      // surround, where its ink-on-transparent styling goes invisible.
+      var margin = 10;
+      var bounds = ticketEl.getBoundingClientRect();
+      var minX = bounds.left + margin;
+      var minY = bounds.top + margin;
+      var maxX = Math.max(minX, bounds.right - boxW - margin);
+      var maxY = Math.max(minY, bounds.bottom - boxH - margin);
+      var x, y, tries = 0;
+      do {
+        x = minX + Math.random() * (maxX - minX);
+        y = minY + Math.random() * (maxY - minY);
+        tries++;
+      } while (fromX != null && tries < 6 && Math.hypot(x - fromX, y - fromY) < 120);
+
+      noBtn.classList.add("dodging");
+      noBtn.style.width = boxW + "px";
+      noBtn.style.height = boxH + "px";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      attempts++;
+      if (attemptsEl) attemptsEl.textContent = attempts;
+      noBtn.textContent = TAUNTS[Math.min(attempts, TAUNTS.length - 1)];
+    }
+
+    function nearButton(x, y, threshold) {
+      var r = rect();
+      return x > r.left - threshold && x < r.right + threshold &&
+             y > r.top - threshold && y < r.bottom + threshold;
+    }
+
+    document.addEventListener("mousemove", function (e) {
+      if (nearButton(e.clientX, e.clientY, 60)) dodge(e.clientX, e.clientY);
+    });
+
+    document.addEventListener("touchstart", function (e) {
+      var t = e.touches[0];
+      if (t && nearButton(t.clientX, t.clientY, 44)) dodge(t.clientX, t.clientY);
+    }, { passive: true });
+
+    noBtn.addEventListener("focus", function () {
+      dodge(null, null);
+    });
+
+    // The failsafe: however a click reaches this button, it only dodges.
+    noBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      dodge(null, null);
+    });
+
+    window.addEventListener("resize", function () {
+      boxW = 0;
+      boxH = 0;
+    });
+
+    // ---- the yes button gets a stamp before it hands off to WhatsApp ----
+    var yesBtn = document.getElementById("reply-yes");
+    yesBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      var href = yesBtn.href;
+      stamp.classList.add("show");
+      yesBtn.style.pointerEvents = "none";
+      setTimeout(function () {
+        window.location.href = href;
+      }, 650);
+    });
+  })();
+</script>
